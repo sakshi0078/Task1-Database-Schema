@@ -1,0 +1,69 @@
+-- MySQL Workbench Synchronization
+-- Generated: 2025-08-04 14:29
+-- Model: New Model
+-- Version: 1.0
+-- Project: Name of the project
+-- Author: HP
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+CREATE SCHEMA IF NOT EXISTS `testcrm` DEFAULT CHARACTER SET utf8 ;
+
+CREATE TABLE IF NOT EXISTS `testcrm`.`Authors` (
+  `Authors_id` INT(11) NOT NULL,
+  `Authors_name` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`Authors_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `testcrm`.`Books` (
+  `Books_id` INT(11) NOT NULL,
+  `Books_title` VARCHAR(100) NULL DEFAULT NULL,
+  `Authors_Authors_id` INT(11) NOT NULL,
+  PRIMARY KEY (`Books_id`),
+  INDEX `fk_Books_Authors_idx` (`Authors_Authors_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Books_Authors`
+    FOREIGN KEY (`Authors_Authors_id`)
+    REFERENCES `testcrm`.`Authors` (`Authors_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `testcrm`.`Members` (
+  `Members_id` INT(11) NOT NULL,
+  `Members_FullName` VARCHAR(100) NULL DEFAULT NULL,
+  `Members_Email` VARCHAR(100) NULL DEFAULT NULL,
+  PRIMARY KEY (`Members_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+CREATE TABLE IF NOT EXISTS `testcrm`.`Borrowing` (
+  `Books_Books_id` INT(11) NOT NULL,
+  `Members_Members_id` INT(11) NOT NULL,
+  `Borrowing_BorrowID` VARCHAR(45) NOT NULL,
+  `Borrowing_BorrorDate` DATE NULL DEFAULT NULL,
+  `Borrowing_Bookid` VARCHAR(45) NULL DEFAULT NULL,
+  `Borrowing_memberid` VARCHAR(45) NULL DEFAULT NULL,
+  `Borrowing_returnDate` VARCHAR(45) NULL DEFAULT NULL,
+  PRIMARY KEY (`Books_Books_id`, `Members_Members_id`, `Borrowing_BorrowID`),
+  INDEX `fk_Borrowing_Members1_idx` (`Members_Members_id` ASC) VISIBLE,
+  CONSTRAINT `fk_Borrowing_Books1`
+    FOREIGN KEY (`Books_Books_id`)
+    REFERENCES `testcrm`.`Books` (`Books_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_Borrowing_Members1`
+    FOREIGN KEY (`Members_Members_id`)
+    REFERENCES `testcrm`.`Members` (`Members_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
